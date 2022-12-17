@@ -6,6 +6,7 @@ import * as tf from "@tensorflow/tfjs-node";
 
 // MNIST data constants:
 const BASE_URL = "https://storage.googleapis.com/cvdf-datasets/mnist/";
+const IMAGE_PATH = "./data/";
 const TRAIN_IMAGES_FILE = "train-images-idx3-ubyte";
 const TRAIN_LABELS_FILE = "train-labels-idx1-ubyte";
 const TEST_IMAGES_FILE = "t10k-images-idx3-ubyte";
@@ -26,17 +27,22 @@ async function fetchOnceAndSaveToDiskWithBuffer(
 ): Promise<Buffer> {
   return new Promise((resolve) => {
     const url = `${BASE_URL}${filename}.gz`;
-    if (fs.existsSync(filename)) {
-      resolve(fs.promises.readFile(filename));
+    const path = `${IMAGE_PATH}${filename}`;
+    
+    if (fs.existsSync(path)) {
+      resolve(fs.promises.readFile(path));
       return;
     }
-    const file = fs.createWriteStream(filename);
+
+    fs.existsSync(IMAGE_PATH) || fs.mkdirSync(IMAGE_PATH);
+
+    const file = fs.createWriteStream(path);
     console.log(`  * Downloading from: ${url}`);
     https.get(url, (response) => {
       const unzip = zlib.createGunzip();
       response.pipe(unzip).pipe(file);
       unzip.on("end", () => {
-        resolve(fs.promises.readFile(filename));
+        resolve(fs.promises.readFile(path));
       });
     });
   });
