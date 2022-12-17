@@ -108,7 +108,7 @@ async function loadLabels(filename: string) {
 }
 
 /** Helper class to handle loading training and test data. */
-export class MnistDataset {
+class MnistDataset {
   dataset: (Float32Array[] | Int32Array[])[] = [];
   trainSize = 0;
   testSize = 0;
@@ -173,3 +173,5 @@ export class MnistDataset {
     };
   }
 }
+
+export const data = new MnistDataset();
