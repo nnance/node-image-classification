@@ -1,5 +1,7 @@
 import * as argparse from "argparse";
 import { trainSave } from "./execution";
+import { model } from "./model";
+import { data } from "./data";
 
 const parser = new argparse.ArgumentParser({
   description: "TensorFlow.js-Node MNIST Example.",
@@ -21,4 +23,4 @@ parser.add_argument("--model_save_path", {
 });
 const args = parser.parse_args();
 
-trainSave(args.epochs, args.batch_size, args.model_save_path);
+trainSave(model, data, args.epochs, args.batch_size, args.model_save_path);
